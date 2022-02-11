@@ -22,8 +22,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.databind.Module.SetupContext;
 import com.interviews.johnlewis.products.model.ColorSwatch;
+import com.interviews.johnlewis.products.model.Price;
 import com.interviews.johnlewis.products.model.Product;
 import com.interviews.johnlewis.products.model.ReducedProducts;
 import com.interviews.johnlewis.products.service.ProductService;
@@ -43,7 +43,7 @@ public class ProductControllerTest {
 	@BeforeAll
 	public static void setUp() {
 		List<ColorSwatch> colorSwatches = Arrays.asList(new ColorSwatch("Blue","oxfb123","3553"));
-		products = new ReducedProducts(Arrays.asList(new Product("567","tshirt",colorSwatches,"£12","Was £12 now £10")));
+		products = new ReducedProducts(Arrays.asList(new Product("567","tshirt",colorSwatches,"£12","Was £12 now £10", new Price())));
 	}
 	
 	@Test

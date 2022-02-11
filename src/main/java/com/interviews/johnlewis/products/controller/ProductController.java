@@ -1,6 +1,6 @@
 package com.interviews.johnlewis.products.controller;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.interviews.johnlewis.products.model.ColorSwatch;
-import com.interviews.johnlewis.products.model.Product;
 import com.interviews.johnlewis.products.model.ReducedProducts;
+import com.interviews.johnlewis.products.response.ProductDetails;
+import com.interviews.johnlewis.products.response.ProductResponse;
 import com.interviews.johnlewis.products.service.ProductService;
 
 @RestController
@@ -24,14 +24,29 @@ public class ProductController {
 	ProductService productsService;
 	
 	@GetMapping("/price/reduction")
-	public ResponseEntity<ReducedProducts> fetchProductsWithReducedPrice(@RequestParam(name = "labelType", 
+	public ResponseEntity<ProductResponse> fetchProductsWithReducedPrice(@RequestParam(name = "labelType", 
 												required= false, 
 												defaultValue="ShowWasNow") 
 												String labelType) {
-		
-		/*List<ColorSwatch> colorSwatches = Arrays.asList(new ColorSwatch("Blue","oxfb123","3553"));
-		ReducedProducts products = new ReducedProducts(Arrays.asList(new Product("567","tshirt",colorSwatches,"£12","Was £12 now £10")));*/
-		return new ResponseEntity<ReducedProducts>(productsService.getProductsWithReducedPrice(labelType), HttpStatus.OK);
+		ReducedProducts products = productsService.getProductsWithReducedPrice(labelType);
+		ProductResponse response = responseConvertor(products);
+		return new ResponseEntity<ProductResponse>(response, HttpStatus.OK);
+	}
+
+	private ProductResponse responseConvertor(ReducedProducts products) {
+		ProductResponse response = new ProductResponse();
+		List<ProductDetails> productDetails = new ArrayList<>();
+		products.getProducts().forEach(p -> {
+			ProductDetails details = new ProductDetails();
+			details.setNowPrice(p.getNowPrice());
+			details.setProductId(p.getProductId());
+			details.setTitle(p.getTitle());
+			details.setPriceLabel(p.getPriceLabel());
+			details.setColorSwatches(p.getColorSwatches());
+			productDetails.add(details);
+		});
+		response.setProducts(productDetails);
+		return response;
 	}
 
 }

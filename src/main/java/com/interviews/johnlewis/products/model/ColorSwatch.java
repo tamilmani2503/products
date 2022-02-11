@@ -1,11 +1,22 @@
 package com.interviews.johnlewis.products.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties
 public class ColorSwatch {
 
+	@JsonAlias("color")
 	private String color;
+	@JsonAlias("basicColor")
 	private String rgbColor;
+	@JsonAlias("skuId")
 	private String skuid;
 
+	public ColorSwatch () {
+		
+	}
+	
 	public ColorSwatch(String color, String rgbColor, String skuid) {
 		this.color = color;
 		this.rgbColor = rgbColor;
